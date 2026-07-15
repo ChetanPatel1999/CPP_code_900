@@ -40,5 +40,6 @@ int main()
     s1.getResultCard();
     s2.getResultCard();
     s3.getResultCard();
+    3
     return 0;
 }
