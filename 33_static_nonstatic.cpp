@@ -30,5 +30,4 @@ int main()
     cout << "c = " << d3.c << " , " << "d = " << d3.d << endl;
 
     return 0;
-
 }
