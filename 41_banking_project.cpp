@@ -9,12 +9,36 @@ class account
     static int totalAccount;
     static string bankName;
 
-public:
-    static void createAccount(account ac[], int index)
+    static int isValid(string name) // ram
     {
+        int i;
+        for (i = 0; name[i] != '\0'; i++)
+        {
+            if (!(name[i] >= 'a' && name[i] <= 'z'))
+            {
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+public:
+    static int createAccount(account ac[], int index)
+    {
+        string name;
         cout << "\nWelcome to account create page .....\n";
         cout << "enter your name : ";
-        cin >> ac[index].accountHolderName;
+        cin >> name;
+        if (isValid(name))
+        {
+            ac[index].accountHolderName = name;
+        }
+        else
+        {
+            cout << "\n inavlid name formate \n\n";
+            return 0;
+        }
+
         cout << "enter account number : ";
         cin >> ac[index].acNumber;
         cout << "enter balence : ";
@@ -22,6 +46,7 @@ public:
         totalBankBalence = totalBankBalence + ac[index].balence;
         totalAccount++;
         cout << "\naccount create succefully\n\n";
+        return 1;
     }
 
     static void displayAllAccount(account ac[], int index)
@@ -94,6 +119,79 @@ public:
         cout << "    totalAccount : " << totalAccount << endl
              << endl;
     }
+
+    static void depositeAmount(account ac[], int index)
+    {
+        if (index > 0)
+        {
+            string acno;
+            cout << "enter account number : ";
+            cin >> acno;
+            int i, f = 0;
+            for (i = 0; i < index; i++)
+            {
+                if (acno == ac[i].acNumber)
+                {
+                    f = 1;
+                    int amount;
+                    cout << "enter amount : ";
+                    cin >> amount; // 200
+                    ac[i].balence = ac[i].balence + amount;
+                    totalBankBalence = totalBankBalence + amount;
+                    cout << "\namount added succesfully\n\n";
+                }
+            }
+            if (f == 0)
+            {
+                printf("\ninvalid account number please enter correcxt account number\n\n");
+            }
+        }
+        else
+        {
+            printf("\nfirst create account then deposite ammount\n\n");
+        }
+    }
+
+    static void withdrawAmount(account ac[], int index)
+    {
+        if (index > 0)
+        {
+            string acno;
+            cout << "enter account number : ";
+            cin >> acno;
+            int i, f = 0;
+            for (i = 0; i < index; i++)
+            {
+                if (acno == ac[i].acNumber)
+                {
+                    f = 1;
+                    int amount;
+                    cout << "enter amount : ";
+                    cin >> amount; // 200
+
+                    if (amount <= ac[i].balence)
+                    {
+                        ac[i].balence = ac[i].balence - amount;
+                        totalBankBalence = totalBankBalence - amount;
+                        cout << "\namount withdraw succefully\n\n";
+                    }
+                    else
+                    {
+                        cout << "\ninsuficiant balence\n";
+                        cout << "you have only " << ac[i].balence << " amount\n\n";
+                    }
+                }
+            }
+            if (f == 0)
+            {
+                printf("\ninvalid account number please enter correcxt account number\n\n");
+            }
+        }
+        else
+        {
+            printf("\nfirst create account then withdraw ammount\n\n");
+        }
+    }
 };
 
 int account::totalBankBalence = 0;
@@ -104,7 +202,7 @@ int main()
 {
     account ac[10];
     int index = 0;
-    int num;
+    int num, res;
     while (true)
     {
         cout << "<----- Welcome to HDFC Bank APP ----->\n";
@@ -123,8 +221,11 @@ int main()
         switch (num)
         {
         case 1:
-            account::createAccount(ac, index);
-            index++; // 3
+            res = account::createAccount(ac, index);
+            if (res == 1)
+            {
+                index++;
+            }
             break;
         case 2:
             account::displayAllAccount(ac, index);
@@ -133,10 +234,10 @@ int main()
             account::displaySingleAccount(ac, index);
             break;
         case 4:
-            account::displaySingleAccount(ac, index);
+            account::withdrawAmount(ac, index);
             break;
         case 5:
-            account::displaySingleAccount(ac, index);
+            account::depositeAmount(ac, index);
             break;
         case 6:
             account::showTotalBankeBalence();
