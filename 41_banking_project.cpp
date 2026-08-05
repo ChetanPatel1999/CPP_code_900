@@ -9,6 +9,7 @@ class account
     static int totalAccount;
     static string bankName;
 
+private:
     static int isValid(string name) // ram
     {
         int i;
